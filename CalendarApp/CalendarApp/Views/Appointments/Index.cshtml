@@ -1,0 +1,32 @@
+﻿@model IEnumerable<CalendarApp.Models.ViewModels.AppointmentViewModel>
+
+@{
+    ViewData["Title"] = "Appointments";
+}
+
+
+<h2>Appointments</h2>
+
+<table class="table">
+    <tr>
+        <th>Date</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Picture</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Date.ToShortDateString()</td>
+            <td>@item.Title</td>
+            <td>@item.Description</td>
+            <td>
+                @if (!string.IsNullOrEmpty(item.PicturePath))
+                {
+                    <img src="@item.PicturePath" alt="Appointment Picture" style="max-width: 100px;" />
+                }
+            </td>
+        </tr>
+    }
+</table>
