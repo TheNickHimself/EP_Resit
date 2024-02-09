@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class AppointmentRepo : IAppointment
+    public class AppointmentRepo : IAppointmentRepository
     {
         private readonly AppointmentsContext _appointmentsContext;
 
@@ -18,15 +18,25 @@ namespace DataAccess.Repositories
             _appointmentsContext = appointmentRepository;
         }
 
-        public IEnumerable<Appointment> GetAppointments()
+        public IQueryable<Appointment> GetAppointments()
         {
+
             return _appointmentsContext.Appointments;
         }
 
         public void AddAppointment(Appointment appointment)
         {
-            _appointmentsContext.Appointments.Add(appointment);
-            _appointmentsContext.SaveChanges();
+            try
+            {
+                _appointmentsContext.Appointments.Add(appointment);
+                _appointmentsContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception as needed
+                throw new Exception("Failed to add appointment to the database.", ex);
+            }
         }
+
     }
 }

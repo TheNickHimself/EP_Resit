@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IAppointment
+    public interface IAppointmentRepository
     {
-        IEnumerable<Appointment> GetAppointments();
+        IQueryable<Appointment> GetAppointments();
         void AddAppointment(Appointment appointment);
     }
 }

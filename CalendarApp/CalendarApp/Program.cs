@@ -20,11 +20,14 @@ namespace Presentation
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<IAppointment, AppointmentRepo>();
+            //builder.Services.AddScoped<IAppointmentRepository, AppointmentRepo>();
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             builder.Services.AddDbContext<AppointmentsContext>((options =>
                 options.UseSqlServer(connectionString)));
+
+            string jsonPath = builder.Environment.ContentRootPath + "/Data/appointments.json";
+            builder.Services.AddScoped<IAppointmentRepository, AppointmentsInFileRepository>(x => new AppointmentsInFileRepository(jsonPath));
 
             var app = builder.Build();
             // Configure the HTTP request pipeline.
