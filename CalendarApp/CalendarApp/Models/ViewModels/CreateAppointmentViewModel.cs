@@ -8,6 +8,6 @@
 
         public string Description { get; set; }
 
-        public string PicturePath { get; set; }
+        public IFormFile ImageFile { get; set; }
     }
 }
