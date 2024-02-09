@@ -11,10 +11,11 @@ namespace CalendarApp.Controllers
     public class AppointmentsController : Controller
     {
         private readonly IAppointmentRepository _appointmentService;
-
-        public AppointmentsController(IAppointmentRepository appointmentService)
+        private readonly IWebHostEnvironment _webHostEnv;
+        public AppointmentsController(IAppointmentRepository appointmentService, IWebHostEnvironment webHostEnv)
         {
             _appointmentService = appointmentService;
+            _webHostEnv = webHostEnv;
         }
 
         public IActionResult Index()
@@ -39,26 +40,22 @@ namespace CalendarApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateAppointmentViewModel viewModel, [FromServices] IWebHostEnvironment webHostEnv)
+        public IActionResult Create(CreateAppointmentViewModel viewModel, [FromServices] IWebHostEnvironment _webHostEnv)
         {
             if (ModelState.IsValid)
             {
                 string relpaht = "";
                 if (viewModel.ImageFile != null && viewModel.ImageFile.Length > 0)
                 {
-                    // Generate a unique filename
                     var fileName = Guid.NewGuid().ToString() + Path.GetExtension(viewModel.ImageFile.FileName);
 
-                    // Combine the wwwroot/images path with the unique filename
-                    var filePath = Path.Combine(webHostEnv.WebRootPath, "images", fileName);
+                    var filePath = Path.Combine(_webHostEnv.WebRootPath, "images", fileName);
 
-                    // Save the file to wwwroot/images
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         viewModel.ImageFile.CopyTo(fileStream);
                     }
 
-                    // Save the file path to the PicturePath property in the model
                     relpaht = "/images/" + fileName;
                 }
 
